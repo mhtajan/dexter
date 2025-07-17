@@ -1,83 +1,12 @@
 {
   "274600504942919681": [
     {
-      "id": 96,
-      "name": "drowzee",
-      "rate": 30,
-      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/96.png",
-      "captureRate": 190
-    },
-    {
-      "id": 23,
-      "name": "ekans",
-      "rate": 50,
-      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/23.png",
-      "captureRate": 255
-    },
-    {
-      "id": 16,
-      "name": "pidgey",
-      "rate": 50,
-      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/16.png",
-      "captureRate": 255,
-      "uniqueId": "PKMN-000000002"
-    },
-    {
-      "id": 23,
-      "name": "ekans",
-      "rate": 50,
-      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/23.png",
-      "captureRate": 255,
-      "uniqueId": "PKMN-000000003"
-    },
-    {
-      "id": 16,
-      "name": "pidgey",
-      "rate": 50,
-      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/16.png",
-      "captureRate": 255,
-      "uniqueId": "PKMN-000000005"
-    },
-    {
+      "id": 1,
       "name": "bulbasaur",
-      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-      "uniqueId": "PKMN-000000010"
-    }
-  ],
-  "1395119609828606105": [
-    {
-      "id": 27,
-      "name": "sandshrew",
-      "rate": 30,
-      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/27.png",
-      "captureRate": 255,
-      "uniqueId": "PKMN-000000004"
-    },
-    {
-      "id": 27,
-      "name": "sandshrew",
-      "rate": 30,
-      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/27.png",
-      "captureRate": 255,
-      "uniqueId": "PKMN-000000008"
-    }
-  ],
-  "1013297287394508851": [
-    {
-      "id": 89,
-      "name": "muk",
       "rate": 20,
-      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/89.png",
-      "captureRate": 75,
-      "uniqueId": "PKMN-000000006"
-    },
-    {
-      "id": 24,
-      "name": "arbok",
-      "rate": 30,
-      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/24.png",
-      "captureRate": 90,
-      "uniqueId": "PKMN-000000007"
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+      "uniqueId": "PKMN-000000018",
+      "captureRate": 45
     }
   ]
 }

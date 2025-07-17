@@ -9,7 +9,18 @@ const client = new Client({
 
 let pokemonList = [];
 let globalPokemonId = 1;
-const starters = ["bulbasaur", "charmander", "squirtle"];
+const starters = [{
+      "name": "bulbasaur",
+      "url": "https://pokeapi.co/api/v2/pokemon/1/"
+    },
+    {
+      "name": "charmander",
+      "url": "https://pokeapi.co/api/v2/pokemon/4/"
+    },
+    {
+      "name": "squirtle",
+      "url": "https://pokeapi.co/api/v2/pokemon/7/"
+    },];
 const idFile = "pokemon_id.txt";
 if (fs.existsSync(idFile)) {
   globalPokemonId = parseInt(fs.readFileSync(idFile, "utf8")) || 1;
@@ -17,12 +28,22 @@ if (fs.existsSync(idFile)) {
 function saveGlobalPokemonId() {
   fs.writeFileSync(idFile, String(globalPokemonId));
 }
+
+async function saveData(dataX) {
+   const PKMNFile = path.join(__dirname, "pokemon.json");
+  if (!fs.existsSync(PKMNFile)) {
+    fs.writeFileSync(PKMNFile, JSON.stringify({}, null, 2));
+    console.log("✅ created pokemon.json");
+  }
+  fs.writeFileSync("pokemon.json", JSON.stringify(dataX, null, 2));
+}
 async function fetchPokemonList() {
   console.log("📥 Fetching Pokémon data from PokéAPI...");
 
   const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=386");
-  const data = await res.json();
-
+  const dataF = await res.json();
+  saveData(dataF);
+  const data = JSON.parse(fs.readFileSync("pokemon.json", "utf8") || "{}");
   const detailedList = await Promise.all(
     data.results.map(async (pokemon) => {
       try {
@@ -104,7 +125,10 @@ const caughtMap = {};
   if(user.bot) return;
   const filePath = path.join(__dirname, 'caught_pokemon.json');
   const caughtData = JSON.parse(fs.readFileSync(filePath));
-  const hasStarter = caughtData[user.id].some(p => starters.includes(p.name));
+  caughtData[user.id] = caughtData[user.id] || [];
+  const hasStarter = caughtData[user.id].some(p => {
+    return starters.some(starter => starter.name === p.name);
+  });
     if (!hasStarter) {
         try {
           await user.send({
@@ -113,8 +137,8 @@ const caughtMap = {};
               new ActionRowBuilder().addComponents(
                 starters.map(starter =>
                   new ButtonBuilder()
-                    .setCustomId(`starter-${starter}`)
-                    .setLabel(starter.charAt(0).toUpperCase() + starter.slice(1))
+                    .setCustomId(`starter-${starter.name}`)
+                    .setLabel(starter.name.charAt(0).toUpperCase() + starter.name.slice(1))
                     .setStyle(ButtonStyle.Secondary)
                 )
               )
@@ -180,23 +204,31 @@ const filePath = path.join(__dirname, 'caught_pokemon.json');
   const caughtData = JSON.parse(fs.readFileSync(filePath));
   const user = interaction.user;
   const [type, value] = interaction.customId.split("-");
-
-  if (type === "starter" && starters.includes(value)) {
+  if (type === "starter") {
     if (!caughtData[user.id]) caughtData[user.id] = [];
 
-    const alreadyHasStarter = caughtData[user.id].some(p => starters.includes(p.name));
+    const alreadyHasStarter = caughtData[user.id].some(p => p.name === value);
     if (alreadyHasStarter) {
       await interaction.reply({ content: "You already have a starter Pokémon!", ephemeral: true });
       return;
     }
+    const index = starters.findIndex(p => p.name === value);
+    const speciesData = await fetch(starters[index].url).then((r) =>
+          r.json()
+        );
 
+        const palPark = speciesData.pal_park_encounters?.[0];
+        const rate = palPark?.rate ?? 20; 
+        const captureRate = speciesData.capture_rate ?? 45; 
     uniqueId = `PKMN-${String(globalPokemonId++).padStart(9, "0")}`;
     saveGlobalPokemonId();
     savePokemonCaught(user.id, {
+      id: speciesData.id,
       name: value,
       rate: rate,
       sprite: pokemonList.find(p => p.name === value)?.sprite || "",
-      uniqueId: uniqueId
+      uniqueId: uniqueId,
+      captureRate: captureRate
     });
 
     await interaction.reply({ content: `✅ You picked **${value}** as your starter! ID: \`${uniqueId}\``, ephemeral: true });
