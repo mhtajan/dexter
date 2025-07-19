@@ -250,7 +250,7 @@ participants = [];
     const message = await channel.messages.fetch(interaction.message.id);
     const oldEmbed = message.embeds[0];
     if(!oldEmbed) return;
-    const updatedEmbed = new EmbedBuilder(oldEmbed).setDescription(`\n**Participants:**\n${participants.map(p => `- ${p.username} (${p.ball})`).join("\n")}`);
+    const updatedEmbed = new EmbedBuilder(oldEmbed).setDescription(`\n**Participants:** ${participants.length}`);
     await message.edit({
       embeds: [updatedEmbed],
       components: message.components
@@ -320,7 +320,7 @@ participants = [];
     });
 
     channel.send({
-          content: `🎉 **${user.username}** caught **${selected.name}**!`,
+          content: `🎉 **${user.username}** caught **${selected.name}** using **${(user.ball).replace(/_/g, ' ')}**!`,
           allowedMentions: { repliedUser: false }
         }).then(SafeDeleteMessage(sentMessage))
         
@@ -356,7 +356,7 @@ participants = [];
     console.error("❌ Failed to react or collect:", err);
   }
 });
-    setTimeout(spawnLoop, Math.floor(Math.random() * 10000) + 10000); // 1–3 mins
+    setTimeout(spawnLoop, Math.floor(Math.random() * 20000) + 10000); // 1–3 mins
   };
 
   spawnLoop();

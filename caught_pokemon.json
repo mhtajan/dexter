@@ -615,6 +615,14 @@
       "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/209.gif",
       "captureRate": 190,
       "uniqueId": "PKMN-000000091"
+    },
+    {
+      "id": 69,
+      "name": "bellsprout",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/69.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000104"
     }
   ],
   "846789958106480671": [
