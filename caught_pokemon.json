@@ -7,6 +7,696 @@
       "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
       "uniqueId": "PKMN-000000018",
       "captureRate": 45
+    },
+    {
+      "id": 50,
+      "name": "diglett",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/50.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000019"
+    },
+    {
+      "id": 13,
+      "name": "weedle",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/13.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000020"
+    },
+    {
+      "id": 343,
+      "name": "baltoy",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/343.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000021"
+    },
+    {
+      "id": 108,
+      "name": "lickitung",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/108.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000022"
+    },
+    {
+      "id": 320,
+      "name": "wailmer",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/320.gif",
+      "captureRate": 125,
+      "uniqueId": "PKMN-000000023"
+    },
+    {
+      "id": 273,
+      "name": "seedot",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/273.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000024"
+    },
+    {
+      "id": 215,
+      "name": "sneasel",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/215.gif",
+      "captureRate": 60,
+      "uniqueId": "PKMN-000000025"
+    },
+    {
+      "id": 353,
+      "name": "shuppet",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/353.gif",
+      "captureRate": 225,
+      "uniqueId": "PKMN-000000026"
+    },
+    {
+      "id": 10,
+      "name": "caterpie",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/10.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000027"
+    },
+    {
+      "id": 283,
+      "name": "surskit",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/283.gif",
+      "captureRate": 200,
+      "uniqueId": "PKMN-000000028"
+    },
+    {
+      "id": 132,
+      "name": "ditto",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/132.gif",
+      "captureRate": 35,
+      "uniqueId": "PKMN-000000029"
+    },
+    {
+      "id": 275,
+      "name": "shiftry",
+      "rate": 10,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/275.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000030"
+    },
+    {
+      "id": 21,
+      "name": "spearow",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/21.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000031"
+    },
+    {
+      "id": 261,
+      "name": "poochyena",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/261.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000032"
+    },
+    {
+      "id": 259,
+      "name": "marshtomp",
+      "rate": 10,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/259.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000033"
+    },
+    {
+      "id": 295,
+      "name": "exploud",
+      "rate": 10,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/295.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000034"
+    },
+    {
+      "id": 191,
+      "name": "sunkern",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/191.gif",
+      "captureRate": 235,
+      "uniqueId": "PKMN-000000044"
+    },
+    {
+      "id": 109,
+      "name": "koffing",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/109.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000045"
+    },
+    {
+      "id": 265,
+      "name": "wurmple",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/265.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000046"
+    },
+    {
+      "id": 92,
+      "name": "gastly",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/92.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000047"
+    },
+    {
+      "id": 93,
+      "name": "haunter",
+      "rate": 10,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/93.gif",
+      "captureRate": 90,
+      "uniqueId": "PKMN-000000048"
+    },
+    {
+      "id": 356,
+      "name": "dusclops",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/356.gif",
+      "captureRate": 90,
+      "uniqueId": "PKMN-000000049"
+    },
+    {
+      "id": 88,
+      "name": "grimer",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/88.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000050"
+    },
+    {
+      "id": 264,
+      "name": "linoone",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/264.gif",
+      "captureRate": 90,
+      "uniqueId": "PKMN-000000051"
+    },
+    {
+      "id": 23,
+      "name": "ekans",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/23.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000100"
+    },
+    {
+      "id": 111,
+      "name": "rhyhorn",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/111.gif",
+      "captureRate": 120,
+      "uniqueId": "PKMN-000000101"
+    },
+    {
+      "id": 50,
+      "name": "diglett",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/50.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000102"
+    },
+    {
+      "id": 43,
+      "name": "oddish",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/43.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000103"
+    }
+  ],
+  "undefined": [
+    {
+      "id": 263,
+      "name": "zigzagoon",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/263.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000035"
+    },
+    {
+      "id": 13,
+      "name": "weedle",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/13.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000036"
+    },
+    {
+      "id": 163,
+      "name": "hoothoot",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/163.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000037"
+    },
+    {
+      "id": 97,
+      "name": "hypno",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/97.gif",
+      "captureRate": 75,
+      "uniqueId": "PKMN-000000038"
+    },
+    {
+      "id": 96,
+      "name": "drowzee",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/96.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000039"
+    },
+    {
+      "id": 341,
+      "name": "corphish",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/341.gif",
+      "captureRate": 205,
+      "uniqueId": "PKMN-000000040"
+    },
+    {
+      "id": 180,
+      "name": "flaaffy",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/180.gif",
+      "captureRate": 120,
+      "uniqueId": "PKMN-000000042"
+    },
+    {
+      "id": 34,
+      "name": "nidoking",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/34.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000043"
+    }
+  ],
+  "1013297287394508851": [
+    {
+      "id": 4,
+      "name": "charmander",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/4.gif",
+      "uniqueId": "PKMN-000000041",
+      "captureRate": 45
+    }
+  ],
+  "326799738143899648": [
+    {
+      "id": 4,
+      "name": "charmander",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/4.gif",
+      "uniqueId": "PKMN-000000052",
+      "captureRate": 45
+    },
+    {
+      "id": 341,
+      "name": "corphish",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/341.gif",
+      "captureRate": 205,
+      "uniqueId": "PKMN-000000053"
+    },
+    {
+      "id": 54,
+      "name": "psyduck",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/54.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000055"
+    },
+    {
+      "id": 289,
+      "name": "slaking",
+      "rate": 10,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/289.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000056"
+    },
+    {
+      "id": 321,
+      "name": "wailord",
+      "rate": 10,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/321.gif",
+      "captureRate": 60,
+      "uniqueId": "PKMN-000000059"
+    },
+    {
+      "id": 309,
+      "name": "electrike",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/309.gif",
+      "captureRate": 120,
+      "uniqueId": "PKMN-000000064"
+    },
+    {
+      "id": 265,
+      "name": "wurmple",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/265.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000065"
+    },
+    {
+      "id": 92,
+      "name": "gastly",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/92.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000069"
+    },
+    {
+      "id": 239,
+      "name": "elekid",
+      "rate": 10,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/239.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000070"
+    },
+    {
+      "id": 274,
+      "name": "nuzleaf",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/274.gif",
+      "captureRate": 120,
+      "uniqueId": "PKMN-000000072"
+    },
+    {
+      "id": 105,
+      "name": "marowak",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/105.gif",
+      "captureRate": 75,
+      "uniqueId": "PKMN-000000075"
+    },
+    {
+      "id": 171,
+      "name": "lanturn",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/171.gif",
+      "captureRate": 75,
+      "uniqueId": "PKMN-000000077"
+    },
+    {
+      "id": 167,
+      "name": "spinarak",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/167.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000078"
+    },
+    {
+      "id": 92,
+      "name": "gastly",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/92.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000079"
+    },
+    {
+      "id": 223,
+      "name": "remoraid",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/223.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000081"
+    },
+    {
+      "id": 219,
+      "name": "magcargo",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/219.gif",
+      "captureRate": 75,
+      "uniqueId": "PKMN-000000082"
+    },
+    {
+      "id": 329,
+      "name": "vibrava",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/329.gif",
+      "captureRate": 120,
+      "uniqueId": "PKMN-000000083"
+    },
+    {
+      "id": 359,
+      "name": "absol",
+      "rate": 10,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/359.gif",
+      "captureRate": 30,
+      "uniqueId": "PKMN-000000084"
+    },
+    {
+      "id": 21,
+      "name": "spearow",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/21.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000085"
+    },
+    {
+      "id": 263,
+      "name": "zigzagoon",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/263.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000086"
+    },
+    {
+      "id": 218,
+      "name": "slugma",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/218.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000087"
+    },
+    {
+      "id": 161,
+      "name": "sentret",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/161.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000088"
+    },
+    {
+      "id": 301,
+      "name": "delcatty",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/301.gif",
+      "captureRate": 60,
+      "uniqueId": "PKMN-000000089"
+    },
+    {
+      "id": 317,
+      "name": "swalot",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/317.gif",
+      "captureRate": 75,
+      "uniqueId": "PKMN-000000090"
+    },
+    {
+      "id": 177,
+      "name": "natu",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/177.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000092"
+    },
+    {
+      "id": 266,
+      "name": "silcoon",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/266.gif",
+      "captureRate": 120,
+      "uniqueId": "PKMN-000000093"
+    },
+    {
+      "id": 52,
+      "name": "meowth",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/52.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000094"
+    },
+    {
+      "id": 225,
+      "name": "delibird",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/225.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000095"
+    },
+    {
+      "id": 288,
+      "name": "vigoroth",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/288.gif",
+      "captureRate": 120,
+      "uniqueId": "PKMN-000000096"
+    },
+    {
+      "id": 366,
+      "name": "clamperl",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/366.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000097"
+    },
+    {
+      "id": 365,
+      "name": "walrein",
+      "rate": 10,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/365.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000098"
+    },
+    {
+      "id": 30,
+      "name": "nidorina",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/30.gif",
+      "captureRate": 120,
+      "uniqueId": "PKMN-000000099"
+    }
+  ],
+  "141003014403129345": [
+    {
+      "id": 1,
+      "name": "bulbasaur",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/1.gif",
+      "uniqueId": "PKMN-000000054",
+      "captureRate": 45
+    },
+    {
+      "id": 19,
+      "name": "rattata",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/19.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000058"
+    },
+    {
+      "id": 265,
+      "name": "wurmple",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/265.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000067"
+    },
+    {
+      "id": 216,
+      "name": "teddiursa",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/216.gif",
+      "captureRate": 120,
+      "uniqueId": "PKMN-000000073"
+    },
+    {
+      "id": 1,
+      "name": "bulbasaur",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/1.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000074"
+    },
+    {
+      "id": 209,
+      "name": "snubbull",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/209.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000091"
+    }
+  ],
+  "846789958106480671": [
+    {
+      "id": 7,
+      "name": "squirtle",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/7.gif",
+      "uniqueId": "PKMN-000000057",
+      "captureRate": 45
+    },
+    {
+      "id": 171,
+      "name": "lanturn",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/171.gif",
+      "captureRate": 75,
+      "uniqueId": "PKMN-000000060"
+    },
+    {
+      "id": 72,
+      "name": "tentacool",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/72.gif",
+      "captureRate": 190,
+      "uniqueId": "PKMN-000000061"
+    },
+    {
+      "id": 43,
+      "name": "oddish",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/43.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000062"
+    },
+    {
+      "id": 149,
+      "name": "dragonite",
+      "rate": 3,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/149.gif",
+      "captureRate": 45,
+      "uniqueId": "PKMN-000000063"
+    },
+    {
+      "id": 29,
+      "name": "nidoran-f",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/29.gif",
+      "captureRate": 235,
+      "uniqueId": "PKMN-000000066"
+    },
+    {
+      "id": 228,
+      "name": "houndour",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/228.gif",
+      "captureRate": 120,
+      "uniqueId": "PKMN-000000068"
+    },
+    {
+      "id": 41,
+      "name": "zubat",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/41.gif",
+      "captureRate": 255,
+      "uniqueId": "PKMN-000000071"
+    },
+    {
+      "id": 89,
+      "name": "muk",
+      "rate": 20,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/89.gif",
+      "captureRate": 75,
+      "uniqueId": "PKMN-000000076"
+    },
+    {
+      "id": 118,
+      "name": "goldeen",
+      "rate": 30,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/118.gif",
+      "captureRate": 225,
+      "uniqueId": "PKMN-000000080"
     }
   ]
 }
