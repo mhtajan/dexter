@@ -36,6 +36,7 @@ const {
     saveBag,
     fetchStarter,
     uploadPokeballEmoji,
+    generateIVs,
 } = require("./utils.js");
 let pokemonList = [];
 let globalPokemonId = 1;
@@ -276,11 +277,13 @@ client.once("ready", async () => {
                 )}`;
 
                 selected.level = level;
+                const iv = generateIVs();
+                selected.iv = iv;
                 selected.stats = {
-                  hp: calcHP(selected.baseStats.hp, level),
-                  attack: calcStat(selected.baseStats.attack, level),
-                  defense: calcStat(selected.baseStats.defense, level),
-                  speed: calcStat(selected.baseStats.speed, level),
+                  hp: calcHP(selected.baseStats.hp,iv.hp, level),
+                  attack: calcStat(selected.baseStats.attack,iv.attack, level),
+                  defense: calcStat(selected.baseStats.defense,iv.defense, level),
+                  speed: calcStat(selected.baseStats.speed,iv.speed, level),
                 };
                 selected.xp = getExpByGrowthRate(selected.growthRate, level);
                 selected.xpNeeded =
@@ -361,6 +364,7 @@ client.on("interactionCreate", async (interaction) => {
     uniqueId = `PKMN-${String(globalPokemonId++).padStart(9, "0")}`;
     saveGlobalPokemonId();
     level = 5; //starter pokemon always start at level 5
+    const iv = generateIVs();
     savePokemonCaught(user.id, {
       id: speciesData.id,
       name: value,
@@ -371,10 +375,10 @@ client.on("interactionCreate", async (interaction) => {
       level: level,
       baseStats: baseStats,
       stats: {
-        hp: calcHP(baseStats.hp, level),
-        attack: calcStat(baseStats.attack, level),
-        defense: calcStat(baseStats.defense, level),
-        speed: calcStat(baseStats.speed, level),
+        hp: calcHP(baseStats.hp,iv.hp, level),
+        attack: calcStat(baseStats.attack,iv.attack, level),
+        defense: calcStat(baseStats.defense,iv.defense, level),
+        speed: calcStat(baseStats.speed,iv.speed, level),
       },
       type: await getPokemonType(speciesData.id),
       xp: getExpByGrowthRate(Data.growth_rate.name, level),
@@ -410,12 +414,86 @@ client.on(Events.MessageCreate, async (message) => {
       return message.reply("You haven't caught any Pokémon yet!");
     }
 
-    let reply = `📘 **${message.author.username}'s Pokédex**\n\n`;
-    userPokemon.forEach((poke, index) => {
-      reply += `#${poke.id} - ${poke.name} (Lv. ${poke.level})\n`;
-    });
+const itemsPerPage = 10;
+let page = 0;
+userPokemon.sort((a, b) => a.id - b.id);
 
-    message.reply(reply);
+const currentPagePokemon = userPokemon.slice(
+  page * itemsPerPage,
+  page * itemsPerPage + itemsPerPage
+);
+const totalPages = Math.ceil(userPokemon.length / itemsPerPage);
+
+const generateEmbed = (page) => {
+  const start = page * itemsPerPage;
+  const end = start + itemsPerPage;
+  const currentPagePokemon = userPokemon.slice(start, end);
+  const totalCaught = userPokemon.length;
+  const totalPokemon = 386;
+
+  const embed = new EmbedBuilder()
+  .setTitle(`${message.author.username}'s Pokédex`)
+  .setColor("Random")
+  .setDescription(
+  currentPagePokemon
+    .map(poke =>
+      `\`${poke.id.toString().padStart(3, '0')} - ${capitalizeFirstLetter(poke.name).padEnd(12)}\` <a:234:1396920911793492068>`
+    )
+    .join('\n')
+)
+  .setFooter({
+    text: `📘 Caught: ${totalCaught}/${totalPokemon} • Page ${page + 1} of ${totalPages}`
+  });
+
+  return embed;
+};
+
+const backButton = new ButtonBuilder()
+  .setCustomId("back")
+  .setLabel("⬅ Back")
+  .setStyle(ButtonStyle.Primary)
+  .setDisabled(true);
+
+const nextButton = new ButtonBuilder()
+  .setCustomId("next")
+  .setLabel("Next ➡")
+  .setStyle(ButtonStyle.Primary)
+  .setDisabled(totalPages <= 1);
+
+const row = new ActionRowBuilder().addComponents(backButton, nextButton);
+
+const embedMessage = await message.channel.send({
+  embeds: [generateEmbed(page)],
+  components: [row],
+});
+
+const collector = embedMessage.createMessageComponentCollector({
+  filter: (i) => i.user.id === userId,
+  time: 60000,
+});
+
+collector.on("collect", async (interaction) => {
+  if (interaction.customId === "next") {
+    page++;
+  } else if (interaction.customId === "back") {
+    page--;
+  }
+
+  // Update button states
+  backButton.setDisabled(page === 0);
+  nextButton.setDisabled(page >= totalPages - 1);
+
+  await interaction.update({
+    embeds: [generateEmbed(page)],
+    components: [new ActionRowBuilder().addComponents(backButton, nextButton)],
+  });
+});
+
+collector.on("end", async () => {
+  await embedMessage.edit({
+    components: [],
+  });
+});
   } else if (message.content.toLowerCase() === "!dailyPK") {
     const userId = message.author.id;
     // add a random item to the user's inventory

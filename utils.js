@@ -4,11 +4,11 @@ const path = require("path");
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-function calcHP(base, level) {
-  return Math.floor((2 * base * level) / 100) + level + 10;
+function calcHP(base, iv, level) {
+  return Math.floor(((2 * base + iv) * level) / 100) + level + 10;
 }
-function calcStat(base, level) {
-  return Math.floor((2 * base * level) / 100) + 5;
+function calcStat(base, iv, level) {
+  return Math.floor(((2 * base + iv) * level) / 100) + 5;
 }
 function getRandomLevel() {
   const r = Math.random();
@@ -144,9 +144,10 @@ async function fetchPokemonList() {
       }
     })
   );
+  pokemonList = detailedList.filter(Boolean);
   console.log(`✅ Loaded ${pokemonList.length} Pokémon with rates.`);
   // Remove failed fetches
-  return pokemonList = detailedList.filter(Boolean);
+  return pokemonList;
 
   
 }
@@ -235,7 +236,16 @@ async function uploadPokeballEmoji() {
     }
   }
 }
-
+function generateIVs() {
+  return {
+    hp: Math.floor(Math.random() * 32),
+    attack: Math.floor(Math.random() * 32),
+    defense: Math.floor(Math.random() * 32),
+    special_attack: Math.floor(Math.random() * 32),
+    special_defense: Math.floor(Math.random() * 32),
+    speed: Math.floor(Math.random() * 32),
+  };
+}
 
 module.exports = {
     capitalizeFirstLetter, 
@@ -253,4 +263,5 @@ module.exports = {
     saveBag,
     fetchStarter,
     uploadPokeballEmoji,
+    generateIVs
 }
