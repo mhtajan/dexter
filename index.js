@@ -430,7 +430,9 @@ const generateEmbed = (page) => {
   const currentPagePokemon = userPokemon.slice(start, end);
   const totalCaught = userPokemon.length;
   const totalPokemon = 386;
-
+  pokemonEmojis = []
+// client.application.emojis.fetch()
+//   .then(emojis => pokemonEmojis = emojis)
   const embed = new EmbedBuilder()
   .setTitle(`${message.author.username}'s Pokédex`)
   .setColor("Random")
