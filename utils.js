@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-
+const axios = require("axios");
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -159,18 +159,20 @@ async function savePokemonCaught(userId, pokemon) {
   data[userId].push(pokemon);
   fs.writeFileSync("caught_pokemon.json", JSON.stringify(data, null, 2));
 }
-async function saveStarter(userId) {
+async function saveStarter(userId, pokemon) {
   const starterFile = path.join(__dirname, "user_starter.json");
   if (!fs.existsSync(starterFile)) {
     fs.writeFileSync(starterFile, JSON.stringify({}, null, 2));
     console.log("✅ created user_starter.json");
   }
   const data = JSON.parse(fs.readFileSync(starterFile, "utf8") || "{}");
+  if (!data[0]) data[0] = [];
   userHasStarter = {
     userId: userId,
     hasStarter: true,
-  };
-  fs.writeFileSync(starterFile, JSON.stringify(userHasStarter, null, 2));
+  }
+  data[0].push(userHasStarter);
+  fs.writeFileSync(starterFile, JSON.stringify(data, null, 2));
   console.log(`✅ saved starter for user ${userId}`);
 }
 async function saveBag(userId, item) {
@@ -189,15 +191,13 @@ async function fetchStarter(userId) {
   if (!fs.existsSync(starterFile)) {
     fs.writeFileSync(starterFile, JSON.stringify({}, null, 2));
     console.log("✅ created user_starter.json");
-    // check if user has a starter
-    const data = JSON.parse(fs.readFileSync(starterFile, "utf8") || "{}");
-    console.log(data)
-    if (data[userId] && data[userId].hasStarter) {
-      return true; // User has a starter
-    } else {
-      return false; // User does not have a starter
-    }
   }
+    const data = JSON.parse(fs.readFileSync(starterFile, "utf8") || "{}");
+    const group = data["0"]
+    if (!Array.isArray(group)) return false;
+
+  const user = group.find(entry => entry.userId === userId);
+  return user ? user.hasStarter === true : false;
 }
 async function uploadPokeballEmoji() {
   for (const ball of pokeBalls) {
@@ -263,5 +263,5 @@ module.exports = {
     saveBag,
     fetchStarter,
     uploadPokeballEmoji,
-    generateIVs
+    generateIVs,
 }
