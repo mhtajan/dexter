@@ -1403,6 +1403,45 @@
       },
       "xp": 17280,
       "xpNeeded": 2251
+    },
+    {
+      "id": 21,
+      "name": "spearow",
+      "rate": 50,
+      "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/21.gif",
+      "captureRate": 255,
+      "type": [
+        "normal",
+        "flying"
+      ],
+      "baseStats": {
+        "hp": 40,
+        "attack": 60,
+        "defense": 30,
+        "special-attack": 31,
+        "special-defense": 31,
+        "speed": 70
+      },
+      "growthRate": "medium",
+      "baseExperience": 52,
+      "uniqueId": "PKMN-000000001",
+      "level": 22,
+      "iv": {
+        "hp": 4,
+        "attack": 30,
+        "defense": 7,
+        "special_attack": 22,
+        "special_defense": 14,
+        "speed": 24
+      },
+      "stats": {
+        "hp": 50,
+        "attack": 38,
+        "defense": 19,
+        "speed": 41
+      },
+      "xp": 10648,
+      "xpNeeded": 1519
     }
   ],
   "326799738143899648": [

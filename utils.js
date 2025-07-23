@@ -103,7 +103,7 @@ function getExpByGrowthRate(growth, level) {
 async function fetchPokemonList() {
   console.log("📥 Fetching Pokémon data from PokéAPI...");
 
-  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=386");
+  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
   const dataF = await res.json();
   saveData(dataF);
   const data = JSON.parse(fs.readFileSync("pokemon.json", "utf8") || "{}");
