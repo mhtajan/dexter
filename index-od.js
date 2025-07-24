@@ -8,12 +8,17 @@ const {
   ButtonStyle,
   Events,
   EmbedBuilder,
+  AttachmentBuilder,
+  MessageFlags,
 } = require("discord.js");
 const fs = require("fs");
 const { type } = require("os");
 const path = require("path");
 const sharp = require('sharp');
 const axios = require('axios');
+const { parseGIF, decompressFrames } = require('gifuct-js');
+const { createCanvas } = require('canvas');
+const GIFEncoder = require('gif-encoder-2')																	   
 
 const client = new Client({
   intents: [
@@ -24,21 +29,25 @@ const client = new Client({
   ],
 });
 const {
-    capitalizeFirstLetter, 
-    calcHP,
-    calcStat,
-    getRandomLevel,
-    getPokemonType,
-    saveGlobalPokemonId,
-    SafeDeleteMessage,
-    getExpByGrowthRate,
-    fetchPokemonList,
-    savePokemonCaught,
-    saveStarter,
-    saveBag,
-    fetchStarter,
-    uploadPokeballEmoji,
-    generateIVs,
+  capitalizeFirstLetter,
+  calcHP,
+  calcStat,
+  getRandomLevel,
+  getPokemonType,
+  saveGlobalPokemonId,
+  SafeDeleteMessage,
+  getExpByGrowthRate,
+  fetchPokemonList,
+  savePokemonCaught,
+  saveStarter,
+  saveBag,
+  fetchStarter,
+  uploadPokeballEmoji,
+  generateIVs,
+  InitializeParticipantData,
+  RecordParticipantData,
+  RemoveParticipant,
+  GetSelectedUserForPokemon,
 } = require("./utils.js");
 let pokemonList = [];
 let globalPokemonId = 1;
@@ -55,51 +64,54 @@ const starters = [
     name: "squirtle",
     url: "https://pokeapi.co/api/v2/pokemon/7/",
   },
+  {
+    name: "chikorita",
+    url: "https://pokeapi.co/api/v2/pokemon/152/",
+  },
+  {
+    name: "cyndaquil",
+    url: "https://pokeapi.co/api/v2/pokemon/155/",
+  },
+  {
+    name: "totodile",
+    url: "https://pokeapi.co/api/v2/pokemon/158/",
+  },
+  {
+    name: "treecko",
+    url: "https://pokeapi.co/api/v2/pokemon/252/",
+  },
+  {
+    name: "torchic",
+    url: "https://pokeapi.co/api/v2/pokemon/255/",
+  },
+  {
+    name: "mudkip",
+    url: "https://pokeapi.co/api/v2/pokemon/258/",
+  }
 ];
 
 const caughtFile = path.join(__dirname, "caught_pokemon.json");
+
 if (!fs.existsSync(caughtFile)) {
   fs.writeFileSync(caughtFile, JSON.stringify({}, null, 2));
   console.log("✅ created caught_pokemon.json");
 }
 
-client.once("ready", async () => {
-  console.log(`✅ Logged in as ${client.user.tag}`);
+InitializeParticipantData();
 
-  const channel = await client.channels.fetch(process.env.SPAWN_CHANNEL_ID);
-  if (!channel) return console.error("❌ Channel not found");
+async function SpawnWildPokemonMessage(client,channel, selectedPokemon){
 
-  const fetchedPkmn = await fetchPokemonList();
-  const spawnLoop = async () => {
-    const candidates = fetchedPkmn.filter(
-      (pkm) => Math.random() * 100 < pkm.rate
-    );
+  level = getRandomLevel();
 
-    const selected =
-      candidates.length > 0
-        ? candidates[Math.floor(Math.random() * candidates.length)]
-        : pokemonList[Math.floor(Math.random() * pokemonList.length)];
-    const caughtMap = {};
-    level = getRandomLevel();
-    const exampleEmbed = new EmbedBuilder()
+    //Initialize Wild Pokemon Embed
+    const wildPokemonEmbed = new EmbedBuilder()
       .setTitle(
-        `✨ A wild **${capitalizeFirstLetter(selected.name)}** appeared!`
+        `✨ A wild **${capitalizeFirstLetter(selectedPokemon.name)}** appeared!`
       )
-      .setImage(selected.sprite)
+      .setImage(selectedPokemon.sprite)
       .setDescription(`\n**LV:** ${level}\n`);
-
-    const message2Embed = new EmbedBuilder()
-      .setTitle(
-        `**OvrDrive** is in combat with **${capitalizeFirstLetter(selected.name)}**!`
-      )
-      .setDescription(selected.sprite)
-      .setDescription(`\n**LV:** ${level}\n`);
-    
-    const guild = client.guilds.cache.get(process.env.GUILD_ID); // or use a specific guild ID
-    
 
     const appEmojis = await client.application.emojis.fetch();
-
     const emojiNames = ["Poke_Ball", "Great_Ball", "Ultra_Ball", "Master_Ball"];
     const reactBalls = [];
     emojiNames.forEach((name) => {
@@ -109,14 +121,15 @@ client.once("ready", async () => {
           name: name,
           id: emoji.id,
         });
-        console.log(`✅ ${name} has been loaded with id. ${emoji.id} `);
       } else {
         console.log(`❌ ${name} is missing.`);
       }
     });
-    await channel
+
+    //Send Spawn Message
+    return await channel
       .send({
-        embeds: [exampleEmbed],
+        embeds: [wildPokemonEmbed],
         components: [
           new ActionRowBuilder().addComponents(
             reactBalls.map((pokeBall) =>
@@ -128,216 +141,325 @@ client.once("ready", async () => {
           ),
         ],
       })
-      .then(async (sentMessage) => {
+}
+
+async function HandleCaptureInteraction(interaction)
+{
+
+  if (interaction.customId.includes('pokeball-'))
+  {
+
+  }
+  await interaction.deferUpdate();
+}
+
+async function StarterPokemonHandler(interaction,channel) {
+
+  const user = interaction.user;        
+  const hasStarter = await fetchStarter(user.id);
+  const pokemonEmoji = client.application.emojis.cache;
+  const messageFromDexter = `
+  🧪 **DEXTER**: "Ah, greetings, *subject ${user.username}*!
+
+  After years of meticulous calculations, quantum simulations, and a minor explosion or two...  
+  I have finally selected **9 optimal Pokémon specimens** for you to begin your field research.
+
+  🤓 Your mission is simple:
+  **Choose ONE starter Pokémon** — but choose wisely! Each holds the potential for *great scientific discovery* (and possibly world domination... but mostly science).
+
+  Now then... Make your selection!"
+
+  *— Dexter, Boy Genius™*
+  `;
+  let participants = JSON.parse(
+                  fs.readFileSync("participant_record.json", "utf8") || "{}"
+                );
+  if (!participants[0]) participants[0] = [];
+
+  if (user.bot) return;
+  if (hasStarter === false) {
+    try {
+      const rows = [];
+      for (let i = 0; i < starters.length; i += 3) {
+        const row = new ActionRowBuilder();
+        const slice = starters.slice(i, i + 3);
+
+        slice.forEach((starter) => {
+          const emojiId = pokemonEmoji.find(
+            (e) => e.name === starter.name
+          )?.id;
+          const button = new ButtonBuilder()
+            .setCustomId(`starter-${starter.name}`)
+            .setStyle(ButtonStyle.Secondary);
+
+          if (emojiId) {
+            button.setEmoji(emojiId); // If it's a custom emoji (raw ID)
+          } else {
+            button.setLabel(starter.name); // Fallback
+          }
+          row.addComponents(button);
+        });
+        rows.push(row);
+      }
+      await user.send({
+        content: messageFromDexter,
+        components: rows,
+      });
+
+      await interaction.reply({
+        content:
+          "📩 Please check your DMs to choose a starter first!",
+        flags: MessageFlags.Ephemeral 
+      });
+
+    } catch (err) {
+      console.error("Failed to DM user:", err);
+      await interaction.reply({
+        content:
+          "❌ I couldn't DM you. Please enable DMs from server members.",
+        flags: MessageFlags.Ephemeral 
+      });
+    }
+
+    return;
+  }
+  else if (hasStarter === true) {
+    
+    if (participants[0].some((p) => p.id === user.id && p.onMessageId === interaction.message.id)) {
+      await interaction.reply({
+        content: "You have already joined this catch!",
+        flags: MessageFlags.Ephemeral 
+      });
+      return;
+    }
+
+    if (participants[0].some((p) => p.id === user.id)) {
+      await interaction.reply({
+        content: "You are already catching another Pokemon!",
+        flags: MessageFlags.Ephemeral 
+      });
+      return;
+    }
+
+    RecordParticipantData({
+      id: user.id,
+      username: user.username,
+      ball: interaction.customId.split("-")[1],
+      onMessageId: interaction.message.id,
+    });
+
+    //Update Wild Pokemon Spawn Message with # of Participants
+    const message = await channel.messages.fetch(
+      interaction.message.id
+    );
+    const oldEmbed = message.embeds[0];
+    if (!oldEmbed) return;
+    const updatedEmbed = new EmbedBuilder(oldEmbed).setDescription(
+      `\n**Participants:** ${participants[0].length+1}`
+    );
+    await message.edit({
+      embeds: [updatedEmbed],
+      components: message.components,
+    });
+
+    await interaction.reply({
+      content: `You joined the catch with **${interaction.customId
+        .split("-")[1]
+        .replace("_", " ")}**!`,
+      flags: MessageFlags.Ephemeral 
+    });
+  }
+}
+
+
+client.once(Events.ClientReady, async () => {
+  console.log(`✅ Logged in as ${client.user.tag}`);
+  const channel = await client.channels.fetch(process.env.SPAWN_CHANNEL_ID);
+
+  if (!channel) return console.error("❌ Channel not found");
+
+  const fetchedPokemon = await fetchPokemonList();
+  const spawnLoop = async () => {
+    const candidates = fetchedPokemon.filter(
+      (pkm) => Math.random() * 100 < pkm.rate
+    );
+
+    const selectedPokemon =
+      candidates.length > 0
+        ? candidates[Math.floor(Math.random() * candidates.length)]
+        : pokemonList[Math.floor(Math.random() * pokemonList.length)];
+    
+    const caughtMap = {};
+
+    SpawnWildPokemonMessage(client, channel, selectedPokemon)
+    .then(async (wildPokemonMessage) => {
+      //Binding a Collector on Wild Pokemon Message
         try {
-          const collector = sentMessage.createMessageComponentCollector({
+          const collector = wildPokemonMessage.createMessageComponentCollector({
             ComponentType: ComponentType.Button,
-            time: 15000, // collector active for 1 minute
+            time: 10000, // collector active for 15 seconds
           });
 
-          participants = [];
-          collector.on("collect", async (interaction) => {
-            const filePath = path.join(__dirname, "caught_pokemon.json");
-            const caughtData = JSON.parse(fs.readFileSync(filePath));
-            const user = interaction.user;
+          let participants = JSON.parse(
+                          fs.readFileSync("participant_record.json", "utf8") || "{}"
+                        );
+          if (!participants[0]) participants[0] = [];
+          
+          collector.on("collect", async (interaction) => {   
+
             if (interaction.customId.startsWith("pokeball-")) {
-              if (user.bot) return;
-              if (!fetchStarter(user.id)){ 
-              try {
-                await user.send({
-                  content: `👋 Hi ${user.username}, you need to pick a starter Pokémon before you can catch wild ones.`,
-                  components: [
-                    new ActionRowBuilder().addComponents(
-                      starters.map((starter) =>
-                        new ButtonBuilder()
-                          .setCustomId(`starter-${starter.name}`)
-                          .setLabel(
-                            starter.name.charAt(0).toUpperCase() +
-                              starter.name.slice(1)
-                          )
-                          .setStyle(ButtonStyle.Secondary)
-                      )
-                    ),
-                  ],
-                });
-
-                await interaction.reply({
-                  content:
-                    "📩 Please check your DMs to choose a starter first!",
-                  ephemeral: true,
-                });
-              } catch (err) {
-                console.error("Failed to DM user:", err);
-                await interaction.reply({
-                  content:
-                    "❌ I couldn't DM you. Please enable DMs from server members.",
-                  ephemeral: true,
-                });
-              }
-              return;
-              }
-              else{
-                if (participants.some((p) => p.id === user.id)) {
-                await interaction.reply({
-                  content: "You have already joined this catch!",
-                  ephemeral: true,
-                });
-                return;
-              }
-              participants.push({
-                id: user.id,
-                username: user.username,
-                ball: interaction.customId.split("-")[1],
-              });
-              const message = await channel.messages.fetch(
-                interaction.message.id
-              );
-              const oldEmbed = message.embeds[0];
-              if (!oldEmbed) return;
-              const updatedEmbed = new EmbedBuilder(oldEmbed).setDescription(
-                `\n**Participants:** ${participants.length}`
-              );
-              await message.edit({
-                embeds: [updatedEmbed],
-                components: message.components,
-              });
-              caughtData[user.id] = caughtData[user.id] || [];
-              const hasStarter = caughtData[user.id].some((p) => {
-                return starters.some((starter) => starter.name === p.name);
-              });
-              await interaction.reply({ content: `You joined the catch with a **${interaction.customId.split("-")[1].replace("_", " ")}**!`, ephemeral: true });
+              
+              StarterPokemonHandler(interaction, channel);
+              //if
             }
-              }
+            
           });
+          
           collector.on("end", async (collected) => {
-            const user =
-              participants[Math.floor(Math.random() * participants.length)];
-            if (collected.size >= 0) {
-              if (!user) {
-                channel
+            
+            console.log(`Collected ${collected.size} items`);
+            const user = await GetSelectedUserForPokemon(wildPokemonMessage.id);
+            
+
+            console.log(' matrh math math on message'+wildPokemonMessage.id);
+            //StartPokemonBattle(channel,interaction,user)
+
+            //no interactions this message
+            if(collected.size === 0)
+            {
+              channel
                   .send({
-                    content: `The **${selected.name}** fled! 💨`,
+                    content: `The **${selectedPokemon.name}** ran away! 💨`,
                   })
-                  .then(SafeDeleteMessage(sentMessage));
+                  .then(SafeDeleteMessage(wildPokemonMessage));
                 return;
-              }
-              if (user.ball === "Master_Ball") {
-                successChance = 100; // Always catch
-              } else {
-                if (user.ball === "Ultra_Ball") {
-                  rate = 150;
-                } else if (user.ball === "Great_Ball") {
-                  rate = 200;
-                } else {
-                  rate = 255; // Default is Poké Ball
-                }
-
-                successChance = Math.min(
-                  (selected.captureRate / rate) * 100,
-                  100
-                );
-              }
-              const roll = Math.random() * 100;
-              if (roll <= successChance) {
-                // Successful catch
-                if (!caughtMap[user.id]) caughtMap[user.id] = [];
-
-                caughtMap[user.id].push({
-                  name: selected.name,
-                  sprite: selected.sprite,
-                });
-
-                channel
-                  .send({
-                    content: `🎉 **${
-                      user.username
-                    }** caught **${capitalizeFirstLetter(
-                      selected.name
-                    )}** using **${user.ball.replace(/_/g, " ")}**!`,
-                    allowedMentions: { repliedUser: false },
-                  })
-                  .then(SafeDeleteMessage(sentMessage));
-
-                selected.uniqueId = `PKMN-${String(globalPokemonId++).padStart(
-                  9,
-                  "0"
-                )}`;
-
-                selected.level = level;
-                const iv = generateIVs();
-                selected.iv = iv;
-                selected.stats = {
-                  hp: calcHP(selected.baseStats.hp,iv.hp, level),
-                  attack: calcStat(selected.baseStats.attack,iv.attack, level),
-                  defense: calcStat(selected.baseStats.defense,iv.defense, level),
-                  speed: calcStat(selected.baseStats.speed,iv.speed, level),
-                };
-                selected.xp = getExpByGrowthRate(selected.growthRate, level);
-                selected.xpNeeded =
-                  getExpByGrowthRate(selected.growthRate, level + 1) -
-                  selected.xp;
-                saveGlobalPokemonId();
-                savePokemonCaught(user.id, selected);
-                console.log(
-                  `✅ ${user.username} caught ${capitalizeFirstLetter(
-                    selected.name
-                  )}`
-                );
-              } else {
-                // Failed catch
-                if (!user) {
+            } else {
+              //Some users clicked the button to catch on this message
+              if (!user) {
+                
+                // No valid participants
                   channel
                     .send({
-                      content: `The **${selected.name}** fled! 💨`,
+                      content: `The **${selectedPokemon.name}** ran away! 💨`,
                     })
-                    .then(SafeDeleteMessage(sentMessage));
-                }
-                channel
-                  .send({
-                    content: `💨 **${selected.name}** escaped from **${user.username}**!`,
-                    allowedMentions: { repliedUser: false },
-                  })
-                  .then(SafeDeleteMessage(sentMessage));
+                    .then(SafeDeleteMessage(wildPokemonMessage));
+                  return;
+              } else {
+                
+                console.log(user.username+' is attempting to catch the pokemon! '+user.id);
 
-                console.log(
-                  `❌ ${user.username} failed to catch ${selected.name}`
-                );
-              }
-            } else if (collected.size === 0) {
-              channel
-                .send({
-                  content: `The **${selected.name}** fled! 💨`,
-                })
-                .then(SafeDeleteMessage(sentMessage));
+                if (user.ball === "Master_Ball") {
+                  successChance = 100; // Always catch
+                } else {
+                  if (user.ball === "Ultra_Ball") {
+                    rate = 150;
+                  } else if (user.ball === "Great_Ball") {
+                    rate = 200;
+                  } else {
+                    rate = 255; // Default is Poké Ball
+                  }
+
+                  successChance = Math.min(
+                    (selectedPokemon.captureRate / rate) * 100,
+                    100
+                  );
+                }
+                const roll = Math.random() * 100;
+                if (roll <= successChance) {
+                  
+                  // Successful catch handling
+                  if (!caughtMap[user.id]) caughtMap[user.id] = [];
+
+                  caughtMap[user.id].push({
+                    name: selectedPokemon.name,
+                    sprite: selectedPokemon.sprite,
+                  });
+
+                  channel
+                    .send({
+                      content: `🎉 **${
+                        user.username
+                      }** caught **${capitalizeFirstLetter(
+                        selectedPokemon.name
+                      )}** using **${user.ball.replace(/_/g, " ")}**!`,
+                      allowedMentions: { repliedUser: false },
+                    })
+                    .then(SafeDeleteMessage(wildPokemonMessage,user.id));
+
+                  selectedPokemon.uniqueId = `PKMN-${String(globalPokemonId++).padStart(
+                    9,
+                    "0"
+                  )}`;
+
+                  selectedPokemon.level = level;
+                  const iv = generateIVs();
+                  selectedPokemon.iv = iv;
+                  selectedPokemon.stats = {
+                    hp: calcHP(selectedPokemon.baseStats.hp, iv.hp, level),
+                    attack: calcStat(selectedPokemon.baseStats.attack, iv.attack, level),
+                    defense: calcStat(
+                      selectedPokemon.baseStats.defense,
+                      iv.defense,
+                      level
+                    ),
+                    speed: calcStat(selectedPokemon.baseStats.speed, iv.speed, level),
+                  };
+                  selectedPokemon.xp = getExpByGrowthRate(selectedPokemon.growthRate, level);
+                  selectedPokemon.xpNeeded =
+                    getExpByGrowthRate(selectedPokemon.growthRate, level + 1) -
+                    selectedPokemon.xp;
+                  saveGlobalPokemonId();
+                  savePokemonCaught(user.id, selectedPokemon);
+                  console.log(
+                    `✅ ${user.username} caught ${capitalizeFirstLetter(
+                      selectedPokemon.name
+                    )}`
+                  );
+                } else {
+                  // Failed catch handling start
+                  channel
+                    .send({
+                      content: `💨 **${selectedPokemon.name}** managed to escaped from **${user.username}**!`,
+                      allowedMentions: { repliedUser: false },
+                    })
+                    .then(SafeDeleteMessage(wildPokemonMessage,user.id));
+
+                  console.log(
+                    `❌ ${user.username} failed to catch ${selectedPokemon.name}`
+                  );
+                }
+              } 
             }
           });
         } catch (err) {
           console.error("❌ Failed to react or collect:", err);
         }
       });
-    setTimeout(spawnLoop, Math.floor(Math.random() * 20000) + 10000); // 1–3 mins
+    setTimeout(spawnLoop, Math.floor(Math.random() * 10000) + 5000); // 1–3 mins
   };
 
   spawnLoop();
 });
-client.on("interactionCreate", async (interaction) => {
+
+
+
+//Always Listening to client
+client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isButton()) return;
-  const filePath = path.join(__dirname, "caught_pokemon.json");
-  const caughtData = JSON.parse(fs.readFileSync(filePath));
   const user = interaction.user;
   const [type, value] = interaction.customId.split("-");
   if (type === "starter") {
-    if (!caughtData[user.id]) caughtData[user.id] = [];
-
-    const alreadyHasStarter = caughtData[user.id].some((p) => p.name === value);
-    if (alreadyHasStarter) {
+    const alreadyHasStarter = await fetchStarter(user.id);
+    if (alreadyHasStarter=== true) {
       await interaction.reply({
         content: "You already have a starter Pokémon!",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral 
       });
-      return;
+      interaction.message.delete().catch(console.error);
+      return; // User already has a starter
     }
-    const index = starters.findIndex((p) => p.name === value);
+    else if (alreadyHasStarter === false) {
+      const index = starters.findIndex((p) => p.name === value);
     const speciesData = await fetch(starters[index].url).then((r) => r.json());
     const Data = await fetch(speciesData.species.url).then((r) => r.json());
     const baseStats = {};
@@ -362,10 +484,10 @@ client.on("interactionCreate", async (interaction) => {
       level: level,
       baseStats: baseStats,
       stats: {
-        hp: calcHP(baseStats.hp,iv.hp, level),
-        attack: calcStat(baseStats.attack,iv.attack, level),
-        defense: calcStat(baseStats.defense,iv.defense, level),
-        speed: calcStat(baseStats.speed,iv.speed, level),
+        hp: calcHP(baseStats.hp, iv.hp, level),
+        attack: calcStat(baseStats.attack, iv.attack, level),
+        defense: calcStat(baseStats.defense, iv.defense, level),
+        speed: calcStat(baseStats.speed, iv.speed, level),
       },
       type: await getPokemonType(speciesData.id),
       xp: getExpByGrowthRate(Data.growth_rate.name, level),
@@ -377,12 +499,14 @@ client.on("interactionCreate", async (interaction) => {
     saveStarter(user.id);
     await interaction.reply({
       content: `✅ You picked **${value}** as your starter! ID: \`${uniqueId}\``,
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral 
     });
+    }
+    
   }
 });
-client.on(Events.MessageCreate, async (message) => {
-  const appEmojis = await client.application.emojis.fetch();
+
+client.on(Events.MessageCreate, async (message) => {															
   if (message.author.bot) return;
 
   if (message.content.toLowerCase() === "!pokedex") {
@@ -402,88 +526,102 @@ client.on(Events.MessageCreate, async (message) => {
       return message.reply("You haven't caught any Pokémon yet!");
     }
 
-const itemsPerPage = 10;
-let page = 0;
-userPokemon.sort((a, b) => a.id - b.id);
+    const itemsPerPage = 10;
+    let page = 0;
+    userPokemon.sort((a, b) => a.id - b.id);
 
-const currentPagePokemon = userPokemon.slice(
-  page * itemsPerPage,
-  page * itemsPerPage + itemsPerPage
-);
-const totalPages = Math.ceil(userPokemon.length / itemsPerPage);
+    const currentPagePokemon = userPokemon.slice(
+      page * itemsPerPage,
+      page * itemsPerPage + itemsPerPage
+    );
+    const totalPages = Math.ceil(userPokemon.length / itemsPerPage);
+    const generateEmbed = (page) => {
+      const start = page * itemsPerPage;
+      const end = start + itemsPerPage;
+      const currentPagePokemon = userPokemon.slice(start, end);
+      const totalCaught = userPokemon.length;
+      const totalPokemon = 386;
+      async function pkmn(pokemon) {
+        const formattedName = pokemon.replace(/-/g, "_");
+        return pokemonEmojiArray.find((emoji) =>
+          emoji.name.startsWith(formattedName)
+        );
+      }
 
-const generateEmbed = (page) => {
-  const start = page * itemsPerPage;
-  const end = start + itemsPerPage;
-  const currentPagePokemon = userPokemon.slice(start, end);
-  const totalCaught = userPokemon.length;
-  const totalPokemon = 151;
-  pokemonEmojis = []
-// client.application.emojis.fetch()
-//   .then(emojis => pokemonEmojis = emojis)
-  const embed = new EmbedBuilder()
-  .setTitle(`${message.author.username}'s Pokédex`)
-  .setColor("Random")
-  .setDescription(
-  currentPagePokemon
-    .map(poke =>
-      `\`${poke.id.toString().padStart(3, '0')} - ${capitalizeFirstLetter(poke.name).padEnd(12)}\` <a:Master_Ball_Capturing:1397102103150985278>`
-    )
-    .join('\n')
-)
-  .setFooter({
-    text: `📘 Caught: ${totalCaught}/${totalPokemon} • Page ${page + 1} of ${totalPages}`
-  });
+      const embed = new EmbedBuilder()
+        .setTitle(`${message.author.username}'s Pokédex`)
+        .setColor("Random")
+        .setDescription(
+          currentPagePokemon
+            .map(
+              (poke) =>
+                `\`${poke.id
+                  .toString()
+                  .padStart(3, "0")} - ${capitalizeFirstLetter(
+                  poke.name
+                ).padEnd(12)}\` ${client.application.emojis.cache.find(
+                  (emoji) => emoji.name === poke.name.replace(/-/g, "_")
+                )}`
+            )
+            .join("\n")
+        )
+        .setFooter({
+          text: `📘 Caught: ${totalCaught}/${totalPokemon} • Page ${
+            page + 1
+          } of ${totalPages}`,
+        });
 
-  return embed;
-};
+      return embed;
+    };
 
-const backButton = new ButtonBuilder()
-  .setCustomId("back")
-  .setLabel("⬅ Back")
-  .setStyle(ButtonStyle.Primary)
-  .setDisabled(true);
+    const backButton = new ButtonBuilder()
+      .setCustomId("back")
+      .setLabel("⬅ Back")
+      .setStyle(ButtonStyle.Primary)
+      .setDisabled(true);
 
-const nextButton = new ButtonBuilder()
-  .setCustomId("next")
-  .setLabel("Next ➡")
-  .setStyle(ButtonStyle.Primary)
-  .setDisabled(totalPages <= 1);
+    const nextButton = new ButtonBuilder()
+      .setCustomId("next")
+      .setLabel("Next ➡")
+      .setStyle(ButtonStyle.Primary)
+      .setDisabled(totalPages <= 1);
 
-const row = new ActionRowBuilder().addComponents(backButton, nextButton);
+    const row = new ActionRowBuilder().addComponents(backButton, nextButton);
 
-const embedMessage = await message.channel.send({
-  embeds: [generateEmbed(page)],
-  components: [row],
-});
+    const embedMessage = await message.channel.send({
+      embeds: [generateEmbed(page)],
+      components: [row],
+    });
 
-const collector = embedMessage.createMessageComponentCollector({
-  filter: (i) => i.user.id === userId,
-  time: 60000,
-});
+    const collector = embedMessage.createMessageComponentCollector({
+      filter: (i) => i.user.id === userId,
+      time: 60000,
+    });
 
-collector.on("collect", async (interaction) => {
-  if (interaction.customId === "next") {
-    page++;
-  } else if (interaction.customId === "back") {
-    page--;
-  }
+    collector.on("collect", async (interaction) => {
+      if (interaction.customId === "next") {
+        page++;
+      } else if (interaction.customId === "back") {
+        page--;
+      }
 
-  // Update button states
-  backButton.setDisabled(page === 0);
-  nextButton.setDisabled(page >= totalPages - 1);
+      // Update button states
+      backButton.setDisabled(page === 0);
+      nextButton.setDisabled(page >= totalPages - 1);
 
-  await interaction.update({
-    embeds: [generateEmbed(page)],
-    components: [new ActionRowBuilder().addComponents(backButton, nextButton)],
-  });
-});
+      await interaction.update({
+        embeds: [generateEmbed(page)],
+        components: [
+          new ActionRowBuilder().addComponents(backButton, nextButton),
+        ],
+      });
+    });
 
-collector.on("end", async () => {
-  await embedMessage.edit({
-    components: [],
-  });
-});
+    collector.on("end", async () => {
+      await embedMessage.edit({
+        components: [],
+      });
+    });
   } else if (message.content.toLowerCase() === "!dailyPK") {
     const userId = message.author.id;
     // add a random item to the user's inventory
@@ -501,18 +639,41 @@ collector.on("end", async () => {
 
     const emoji1 = appEmojis.find((e) => e.name === 'bulbasaur');
     const emoji2 = appEmojis.find((e) => e.name === 'mew');
-    // const emoji1Large = `${emoji1.url}?size=256`
-    // const emoji2Large = `${emoji2.url}?size=256`
+    const emoji1LargeUrl = `${emoji1.url}?size=256`
+    const emoji2LargeUrl = `${emoji2.url}?size=256`
 
     // const imageRes = await axios.get(emoji1Large, {
     //     responseType: "arraybuffer"
     //   });
-    //   const gifBuffer1 = await axios.get(emoji1Large, {
-    //     responseType: "arraybuffer"
-    //   });
-    //   const gifBuffer2 = await axios.get(emoji2Large, {
-    //     responseType: "arraybuffer"
-    //   });
+    const emoji1LargeFrames = await getGifFrames(emoji1LargeUrl)
+    const emoji2LargeFrames = await getGifFrames(emoji2LargeUrl)
+
+    const canvas = createCanvas(400, 350); // Custom width and height
+    const ctx = canvas.getContext('2d');
+    
+    const encoder = new GIFEncoder(400,350)
+    encoder.setRepeat(0); // 0 for infinite loop
+    
+    console.log('drawing image 1 frames starting '+emoji1LargeFrames.length);
+    console.log('drawing image 2 frames starting '+emoji2LargeFrames.length);
+    encoder.start()
+    for (let i = 0; i < 20; i++) {
+    
+      const imageData1 = ctx.createImageData(emoji1LargeFrames[i].dims.width, emoji1LargeFrames[i].dims.height);
+      imageData1.data.set(emoji1LargeFrames[i].patch);
+      ctx.putImageData(imageData1,50,200);
+      console.log('drawing img 1 frame  # '+i);
+
+      const imageData2 = ctx.createImageData(emoji2LargeFrames[i].dims.width, emoji2LargeFrames[i].dims.height);
+      imageData2.data.set(emoji2LargeFrames[i].patch);
+      ctx.putImageData(imageData2,200,100);
+      console.log('drawing img 2 frame  # '+i);
+      // Add frame to encoder
+      // For gif.js
+      encoder.addFrame(ctx);
+    }
+    encoder.finish()
+    console.log('drawing frames finished ');
 
     //   const imageBase64 = await sharp(imageRes.data, { animated: true}).composite([
     //           {
@@ -529,9 +690,15 @@ collector.on("end", async () => {
 
     //  const attachment = new AttachmentBuilder(imageBase64, { name: 'testgif' });
 
-      
-    // const embedimg1 = new EmbedBuilder()
-    // .setImage(imageBase64);
+
+    const attachment = new AttachmentBuilder(Buffer.from(encoder.out.getData()), { name: 'test.gif' });
+    console.log(attachment);
+    const embedimg1 = {
+      title: 'Some title',
+      image: {
+        url: `attachment://test.gif`,
+      },
+    };
     // const embedimg2 = new EmbedBuilder()
     // .setImage(emoji2Large);
 
@@ -544,15 +711,27 @@ collector.on("end", async () => {
     // });
 
     await message.channel.send({
+      embeds: [embedimg1],
       content:`<:dot:1397234058362093660>
               <:hp_leftcap:1397209958608666644><:hp_inner:1397209968117026906><:hp_rightcap:1397209977818714263><a:${emoji2.name}:${emoji2.id}>
               <:dot:1397234058362093660><:dot:1397234058362093660><:dot:1397234058362093660><:dot:1397234058362093660><:dot:1397234058362093660>
               <a:${emoji1.name}:${emoji1.id}><:hp_leftcap:1397209958608666644><:hp_inner:1397209968117026906><:hp_rightcap:1397209977818714263>
-              <:dot:1397234058362093660>`
+              <:dot:1397234058362093660>`,
+      files: [attachment]
+      
             });
+      
 
   }
   
 });
 
+async function getGifFrames(gifURL) {
+        const imageRes = await axios.get(gifURL, {
+          responseType: "arraybuffer"
+        });
+        const gif = parseGIF(imageRes.data);
+        const frames = decompressFrames(gif, true); // true for coalescing frames
+        return frames;
+    }
 client.login(process.env.TOKEN);

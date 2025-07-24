@@ -45,9 +45,10 @@ if (fs.existsSync(idFile)) {
 }
   fs.writeFileSync(idFile, String(globalPokemonId));
 }
-async function SafeDeleteMessage(message) {
+async function SafeDeleteMessage(message,userId) {
   try {
     const fetchedMessage = await message.fetch();
+    if(userId){RemoveParticipant(userId);}
     console.log("message exists ready to delete");
     fetchedMessage.delete();
   } catch (error) {
@@ -151,6 +152,82 @@ async function fetchPokemonList() {
 
   
 }
+async function InitializeParticipantData(){
+  const ParticipantFile = path.join(__dirname, "participant_record.json");
+  if (!fs.existsSync(ParticipantFile)) {
+    fs.writeFileSync(ParticipantFile, JSON.stringify({}, null, 2));
+    console.log("✅ created participant_record.json");
+  }
+}
+async function RecordParticipantData(participantData)
+{
+  InitializeParticipantData();
+  let data = JSON.parse(
+                fs.readFileSync("participant_record.json", "utf8") || "{}"
+              );
+  if (!data[0]) data[0] = [];
+  data[0].forEach(element => {
+    console.log(element.username+` participant `+element.id);
+  });
+  console.log(`attempting to record participant `+participantData.id);
+  const user = data[0].find(entry => entry.id === participantData.id);
+
+  if(user){
+    //do nothing
+    console.log('user already in record and catching something '+user.id);
+  } else {
+    data[0].push(participantData);
+    
+    fs.writeFileSync("participant_record.json", JSON.stringify(data, null, 2));
+  }
+}
+
+async function RemoveParticipant(userId){
+  
+  let data = JSON.parse(
+                fs.readFileSync("participant_record.json", "utf8") || "{}"
+              );
+  console.log('removing participant '+userId);
+  data[0].splice(data[0].find( entry => entry.id === userId),1);
+  data[0].forEach(element => {
+    console.log(element.username+`  deleted? `+element.id);
+  });
+  fs.writeFileSync("participant_record.json", JSON.stringify(data, null, 2));
+}
+
+async function GetSelectedUserForPokemon(messageId)
+{
+  
+  let data = JSON.parse(
+                fs.readFileSync("participant_record.json", "utf8") || "{}"
+              );
+  
+  const randomSelector = Math.floor(Math.random() * data[0].length);
+
+  data[0].forEach(element => {
+    console.log(element.username+`  datato filter `+element.id);
+  });
+
+  let subData = data[0].filter(item => item.onMessageId === messageId); 
+  
+  let chosenUser = subData[randomSelector];
+
+  subData.forEach((user) => RemoveParticipant(user));
+  console.log(subData.username);
+
+  return chosenUser;
+}
+
+function getItemsByValue(jsonArray, targetValue, key) {
+  let results = [];
+  for (let i = 0; i < jsonArray.length; i++) {
+    const item = jsonArray[i];
+    if (item && item[key] === targetValue) {
+      results.push(item);
+    }
+  }
+  return results;
+} 
 async function savePokemonCaught(userId, pokemon) {
   const data = JSON.parse(
     fs.readFileSync("caught_pokemon.json", "utf8") || "{}"
@@ -264,4 +341,8 @@ module.exports = {
     fetchStarter,
     uploadPokeballEmoji,
     generateIVs,
+    InitializeParticipantData,
+    RecordParticipantData,
+    RemoveParticipant,
+    GetSelectedUserForPokemon,
 }
